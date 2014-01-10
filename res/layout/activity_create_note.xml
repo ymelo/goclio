@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/create_note_tv_subject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dip"
+        android:ems="10"
+        android:hint="@string/hint_create_note_subject"
+        android:text="" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/create_note_tv_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/create_note_tv_subject"
+        android:ems="10"
+        android:hint="@string/hint_create_note_details"
+        android:inputType="textMultiLine"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/create_note_tv_details" >
+
+        <Button
+            android:id="@+id/create_note_btn_cancel"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@android:string/cancel"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/create_note_btn_ok"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@android:string/ok" 
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+</RelativeLayout>

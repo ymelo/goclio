@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GoClioChallenge</string>
+    <string name="title_matter_detail">matter Detail</string>
+	<string name="add_note">Add a note</string>
+	<string name="hint_create_note_subject">Subject</string>
+	<string name="hint_create_note_details">Details</string>
+</resources>
