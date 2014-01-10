@@ -31,7 +31,7 @@ public class MatterListActivity extends FragmentActivity implements
 	 */
 	private boolean mTwoPane;
 
-	private Fragment left, middle, right;
+	private Fragment left, right;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -77,19 +77,7 @@ public class MatterListActivity extends FragmentActivity implements
 	 */
 	@Override
 	public void onMatterSelected(int id) {
-		if (false && mTwoPane) {
-			// In two-pane mode, show the detail view in this activity by
-			// adding or replacing the detail fragment using a
-			// fragment transaction.
-			Bundle arguments = new Bundle();
-			arguments.putInt(NoteListFragment.ARG_ITEM_ID, id);
-			middle = new NoteListFragment();
-			middle.setArguments(arguments);
-			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-			ft.replace(R.id.matter_detail_container, middle);
-			ft.commit();
-
-		} else {
+		{
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, NoteListActivity.class);

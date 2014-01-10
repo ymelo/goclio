@@ -17,13 +17,11 @@ import android.view.MenuItem;
 
 import com.goclio.challenge.data.Note;
 
-public class NoteDetailActivity extends FragmentActivity implements FragmentCallbacks{
+public class NoteDetailActivity extends FragmentActivity{
 	
 	ArrayList<Note> list;
-    /**
-     * The number of pages (wizard steps) to show in this demo.
-     */
-    private static final int NUM_PAGES = 2;
+    
+	public static final String NOTE_LIST = "com.goclio.challenge.note_list";
 
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
@@ -43,7 +41,12 @@ public class NoteDetailActivity extends FragmentActivity implements FragmentCall
         getActionBar().setDisplayHomeAsUpEnabled(true);	
         // Instantiate a ViewPager and a PagerAdapter.
         Intent intent = getIntent();
-        String pageNumber = intent.getStringExtra(NoteDetailFragment.ARG_PAGE);
+        int pos = 0;
+        if(intent != null) {
+        	list = intent.getParcelableArrayListExtra(NOTE_LIST);
+        	pos = intent.getIntExtra(NoteDetailFragment.ARG_PAGE, 0);
+        }
+        
         mPager = (ViewPager) findViewById(R.id.pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
@@ -57,24 +60,13 @@ public class NoteDetailActivity extends FragmentActivity implements FragmentCall
                 invalidateOptionsMenu();
             }
         });
-        mPager.setCurrentItem(Integer.valueOf(pageNumber));
+        mPager.setCurrentItem(pos);
         
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-//        getMenuInflater().inflate(R.menu.activity_screen_slide, menu);
-//
-//        menu.findItem(R.id.action_previous).setEnabled(mPager.getCurrentItem() > 0);
-//
-//        // Add either a "next" or "finish" button to the action bar, depending on which page
-//        // is currently selected.
-//        MenuItem item = menu.add(Menu.NONE, R.id.action_next, Menu.NONE,
-//                (mPager.getCurrentItem() == mPagerAdapter.getCount() - 1)
-//                        ? R.string.action_finish
-//                        : R.string.action_next);
-//        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         return true;
     }
 
@@ -91,15 +83,10 @@ public class NoteDetailActivity extends FragmentActivity implements FragmentCall
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A simple pager adapter that represents 5 {@link ScreenSlidePageFragment} objects, in
-     * sequence.
-     */
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
     	
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
-            list = new ArrayList<Note>();
         }
 
         @Override
@@ -112,37 +99,8 @@ public class NoteDetailActivity extends FragmentActivity implements FragmentCall
 
         @Override
         public int getCount() {
-            return NUM_PAGES;
+            return list.size();
         }
     }
 
-	@Override
-	public void onMatterSelected(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onNoteSelected(String id) {
-		
-		
-	}
-    
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case android.R.id.home:
-//			// This ID represents the Home or Up button. In the case of this
-//			// activity, the Up button is shown. Use NavUtils to allow users
-//			// to navigate up one level in the application structure. For
-//			// more details, see the Navigation pattern on Android Design:
-//			//
-//			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-//			//
-//			NavUtils.navigateUpTo(this, new Intent(this,
-//					MatterListActivity.class));
-//			return true;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
 }

@@ -15,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.goclio.challenge.data.Note;
-import com.goclio.challenge.tasks.NoteTaskFragment.TaskCallbacks;
 
 /**
  * A fragment representing a single matter detail screen. This fragment is
@@ -27,7 +26,8 @@ public class NoteListFragment extends ListFragment {
 		/**
 		 * Callback for when an item has been selected.
 		 */
-		public void onNoteSelected(Note note);
+
+		void onNoteSelected(ArrayList<Note> list, int pos);
 	}
 	
 	private NoteAsyncTask noteTask; 
@@ -71,7 +71,7 @@ public class NoteListFragment extends ListFragment {
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 
 		@Override
-		public void onNoteSelected(Note note) {
+		public void onNoteSelected(ArrayList<Note> list, int pos) {
 		}
 	};
 
@@ -85,12 +85,6 @@ public class NoteListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// TODO: replace with a real list adapter.
-		// setListAdapter(new
-		// ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-		// android.R.layout.simple_list_item_activated_1,
-		// android.R.id.text1, DummyContent.NOTES));
 		Intent intent = getActivity().getIntent();
 		if (intent != null) {
 			id = intent.getExtras().getString(ARG_ITEM_ID);
@@ -145,7 +139,7 @@ public class NoteListFragment extends ListFragment {
 		// Notify the active callbacks interface (the activity, if the
 		// fragment is attached to one) that an item has been selected.
 		// mCallbacks.onNoteSelected(DummyContent.ITEMS.get(position).id);
-		mCallbacks.onNoteSelected(list.get(position));
+		mCallbacks.onNoteSelected(list, position);
 	}
 
 	@Override
@@ -184,12 +178,6 @@ public class NoteListFragment extends ListFragment {
 	public class NoteAsyncTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... params) {
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			list = ClioApi.getNotesForMatter(Integer.valueOf(params[0]));
 			return null;
 		}

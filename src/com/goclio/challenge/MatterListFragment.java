@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.goclio.challenge.NoteListFragment.Callbacks;
 import com.goclio.challenge.data.Matter;
-import com.goclio.challenge.dummy.DummyContent;
 
 /**
  * A list fragment representing a list of matters. This fragment also supports
@@ -24,6 +24,7 @@ import com.goclio.challenge.dummy.DummyContent;
  */
 public class MatterListFragment extends ListFragment {
 
+	AllMattersAsyncTask matterTask;
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
 	 * activated item position. Only used on tablets.
@@ -65,13 +66,9 @@ public class MatterListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// TODO: replace with a real list adapter.
-//		setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-//				android.R.layout.simple_list_item_activated_1,
-//				android.R.id.text1, DummyContent.ITEMS));
-		
-		new AllMattersAsyncTask().execute("");
+		// Should be retained|saved in a fragment (will crash on conf. change)
+		matterTask = new AllMattersAsyncTask();
+		matterTask.execute();
 	}
 
 	public class AllMattersAsyncTask extends AsyncTask<String, Void, String> {
@@ -122,6 +119,9 @@ public class MatterListFragment extends ListFragment {
 
 		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
+		if(matterTask != null && matterTask.isCancelled() == false) {
+			matterTask.cancel(true);
+		}
 	}
 
 	@Override

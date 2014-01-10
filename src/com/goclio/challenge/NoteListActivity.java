@@ -1,5 +1,7 @@
 package com.goclio.challenge;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,38 +29,24 @@ public class NoteListActivity extends FragmentActivity implements Callbacks {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_note_twopane);
-		// setContentView(R.layout.activity_note_list);
-		Intent intent = getIntent();
-		String id = intent.getStringExtra(NoteListFragment.ARG_ITEM_ID);
+		//setContentView(R.layout.activity_note_twopane);
+		setContentView(R.layout.activity_note_list);
 		if (findViewById(R.id.note_detail_container) != null) {
 			mTwoPane = true;
 			
 			left = getSupportFragmentManager().findFragmentById(
 					R.id.note_list);
 			((NoteListFragment) left).setActivateOnItemClick(true);
-//			left = new NoteListFragment();
-//			Bundle arguments = new Bundle();
-//			arguments.putString(NoteListFragment.ARG_ITEM_ID, id);
-//			left.setArguments(arguments);
-//			getSupportFragmentManager().beginTransaction()
-//			.replace(R.id.note_list, left).commit();
-//			((NoteListFragment) left).setActivatedPosition(0);
-//			noteDetail = NoteDetailFragment.create(0);
-//			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//			ft.replace(R.id.note_detail_container, noteDetail);
-//			//ft.addToBackStack(null);
-//			ft.commit();
 		}
 	}
 
 	@Override
-	public void onNoteSelected(Note note) {
+	public void onNoteSelected(ArrayList<Note> list, int pos) {
 		if (mTwoPane) {
 			// In two-pane mode, show the detail view in this activity by
 			// adding or replacing the detail fragment using a
 			// fragment transaction.
-			noteDetail = NoteDetailFragment.create(note);
+			noteDetail = NoteDetailFragment.create(list.get(pos));
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			ft.replace(R.id.note_detail_container, noteDetail);
 			//ft.addToBackStack(null);
@@ -69,9 +57,9 @@ public class NoteListActivity extends FragmentActivity implements Callbacks {
 			// In single-pane mode, simply start the detail activity
 			// for the selected item ID.
 			Intent detailIntent = new Intent(this, NoteDetailActivity.class);
-			detailIntent.putExtra(NoteDetailFragment.ARG_PAGE, note);
+			detailIntent.putExtra(NoteDetailFragment.ARG_PAGE, pos);
+			detailIntent.putParcelableArrayListExtra(NoteDetailActivity.NOTE_LIST, list);
 			startActivity(detailIntent);
-			//overridePendingTransition(R.anim.master_detail_slide, R.anim.master_detail_slide);	
 		}
 		
 	}
