@@ -3,4 +3,5 @@
     <string name="error_create_note_json">An error occurred while creating the note, please contact the developer as he probably have done something wrong!</string>
     <string name="error_create_note_matter_id">Matter ID cannot be read, try again</string>
     <string name="error_create_note_missing">Missing arguments</string>
+    <string name="error_create_note_server">Error while creating note on the server</string>
 </resources>

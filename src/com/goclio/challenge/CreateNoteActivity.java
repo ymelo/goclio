@@ -4,6 +4,7 @@ import org.json.JSONException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -54,18 +55,41 @@ public class CreateNoteActivity extends Activity implements OnClickListener{
 				return ;
 			}
 			Note n = new Note(subject.getText().toString(), details.getText().toString(), "Matter", Integer.valueOf(id));
-			try {
-				ClioApi.createNote(n);
-				setResult(RESULT_OK);
-				finish();
-			} catch (JSONException e) {
-				Toast.makeText(this, getString(R.string.error_create_note_json), Toast.LENGTH_LONG).show();
-				e.printStackTrace();
-			}
+			new CreateNoteAsyncTask().execute(n);
+			
 		}
 		else if (v == cancel) {
 			setResult(RESULT_CANCELED);
 			finish();
+		}
+		
+	}
+	
+	public class CreateNoteAsyncTask extends AsyncTask<Note, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Note... params) {
+			if(params != null && params.length ==1) {
+				try {
+					return ClioApi.createNote(params[0]);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+			
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Boolean result) {
+			if(result) {
+				setResult(RESULT_OK);
+				finish();
+			}
+			else {
+				Toast.makeText(getApplicationContext(), getString(R.string.error_create_note_server), Toast.LENGTH_LONG).show();
+			}
+			
 		}
 		
 	}

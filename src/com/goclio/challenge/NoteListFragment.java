@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.goclio.challenge.data.Note;
+import com.goclio.challenge.tasks.NoteTaskFragment.TaskCallbacks;
 
 /**
  * A fragment representing a single matter detail screen. This fragment is
@@ -28,6 +29,8 @@ public class NoteListFragment extends ListFragment {
 		 */
 		public void onNoteSelected(Note note);
 	}
+	
+	private NoteAsyncTask noteTask; 
 
 	/**
 	 * The list used by the adapter (stores all the notes displayed)
@@ -91,7 +94,8 @@ public class NoteListFragment extends ListFragment {
 		Intent intent = getActivity().getIntent();
 		if (intent != null) {
 			id = intent.getExtras().getString(ARG_ITEM_ID);
-			new NoteAsyncTask().execute(id);
+			noteTask = new NoteAsyncTask();
+			noteTask.execute(id);
 		}
 		setHasOptionsMenu(true);
 	}
@@ -127,6 +131,10 @@ public class NoteListFragment extends ListFragment {
 
 		// Reset the active callbacks interface to the dummy implementation.
 		mCallbacks = sDummyCallbacks;
+		if(noteTask != null && noteTask.isCancelled() == false) {
+			noteTask.cancel(true);
+		}
+		
 	}
 
 	@Override
@@ -222,7 +230,11 @@ public class NoteListFragment extends ListFragment {
 			// cons: Network usage
 			setListAdapter(null);
 			setListShown(false);
-			new NoteAsyncTask().execute(id);
+			if(noteTask != null && noteTask.isCancelled() == false){
+				noteTask.cancel(true);
+			}
+			noteTask = new NoteAsyncTask();
+			noteTask.execute(id);
 
 		} else {
 			// Do not reload
